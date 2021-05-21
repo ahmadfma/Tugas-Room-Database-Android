@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primary">#046A9A</color>
     <color name="abu">#F4F4F4</color>
+    <color name="orange">#FFB406</color>
+    <color name="hijau">#00D432</color>
+    <color name="merah">#F90000</color>
 </resources>

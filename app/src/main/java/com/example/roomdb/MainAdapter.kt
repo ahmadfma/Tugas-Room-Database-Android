@@ -12,17 +12,23 @@ import java.util.*
 class MainAdapter(private val list: List<UserEntity>): RecyclerView.Adapter<MainAdapter.Holder>() {
 
     inner class Holder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun bind(note: UserEntity) {
+        fun bind(note: UserEntity, position: Int) {
             with(itemView) {
-                setRandomColor(itemView)
+                setRandomColor(itemView, position)
                 titleNote.text = note.title
                 notetv.text = note.note
             }
         }
-        private fun setRandomColor(itemView: View) {
-            val rnd = Random()
-            val color: Int = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
-            itemView.colorLine.setBackgroundColor(color)
+        private fun setRandomColor(itemView: View, position: Int) {
+            val i = position % 4
+            with(itemView) {
+                when(i) {
+                    0 -> colorLine.setImageResource(R.color.primary)
+                    1 -> colorLine.setImageResource(R.color.orange)
+                    2 -> colorLine.setImageResource(R.color.hijau)
+                    3 -> colorLine.setImageResource(R.color.merah)
+                }
+            }
         }
     }
 
@@ -32,7 +38,7 @@ class MainAdapter(private val list: List<UserEntity>): RecyclerView.Adapter<Main
     }
 
     override fun onBindViewHolder(holder: MainAdapter.Holder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(list[position], position)
     }
 
     override fun getItemCount(): Int {
