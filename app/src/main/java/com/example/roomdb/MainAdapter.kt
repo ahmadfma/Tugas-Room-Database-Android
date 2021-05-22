@@ -9,14 +9,21 @@ import com.example.roomdb.User.UserEntity
 import kotlinx.android.synthetic.main.item_note.view.*
 import java.util.*
 
-class MainAdapter(private val list: List<UserEntity>): RecyclerView.Adapter<MainAdapter.Holder>() {
+class MainAdapter(private val list: List<UserEntity>, private val listener: OnClickListener): RecyclerView.Adapter<MainAdapter.Holder>() {
+
+    interface OnClickListener {
+        fun onDeleteClick(note: UserEntity)
+    }
 
     inner class Holder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun bind(note: UserEntity, position: Int) {
+        fun bind(note: UserEntity, position: Int, listener: OnClickListener) {
             with(itemView) {
                 setRandomColor(itemView, position)
                 titleNote.text = note.title
                 notetv.text = note.note
+                deleteBtn.setOnClickListener {
+                    listener.onDeleteClick(note)
+                }
             }
         }
         private fun setRandomColor(itemView: View, position: Int) {
@@ -38,7 +45,7 @@ class MainAdapter(private val list: List<UserEntity>): RecyclerView.Adapter<Main
     }
 
     override fun onBindViewHolder(holder: MainAdapter.Holder, position: Int) {
-        holder.bind(list[position], position)
+        holder.bind(list[position], position, listener)
     }
 
     override fun getItemCount(): Int {
