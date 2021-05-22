@@ -2,6 +2,7 @@ package com.example.roomdb
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
@@ -13,6 +14,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.dialog_add.*
 import kotlinx.android.synthetic.main.dialog_add.view.*
 import kotlinx.android.synthetic.main.item_note.*
+
+const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,13 +29,15 @@ class MainActivity : AppCompatActivity() {
         recyclerview.setHasFixedSize(true)
         recyclerview.layoutManager = LinearLayoutManager(this)
         viewModel.getNotes()?.observe(this, Observer {
-            if(it.isNotEmpty()) {
-                recyclerview.adapter = MainAdapter(it, object : MainAdapter.OnClickListener {
-                    override fun onDeleteClick(note: UserEntity) {
-                        deletebtnAction(note)
-                    }
-                })
-            }
+            recyclerview.adapter = MainAdapter(it, object : MainAdapter.OnClickListener {
+                override fun onDeleteClick(note: UserEntity) {
+                    deletebtnAction(note)
+                }
+
+                override fun onViewClick(note: UserEntity) {
+                    updateAction(note)
+                }
+            })
         })
 
         addbtn.setOnClickListener {
@@ -70,6 +75,29 @@ class MainActivity : AppCompatActivity() {
             //nothing
         }
         builder.show()
+    }
+
+    private fun updateAction(notes: UserEntity) {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add, null)
+        val builder = AlertDialog.Builder(this)
+            .setView(dialogView)
+        val mDialog = builder.show()
+        with(dialogView) {
+            judul.setText(notes.title)
+            note.setText(notes.note)
+            simpan_btn.text = "Update"
+            simpan_btn.setOnClickListener {
+                if(judul.text.trim().isNotEmpty() && note.text.trim().isNotEmpty()) {
+                    mDialog.dismiss()
+                    notes.note = note.text.toString()
+                    notes.title = judul.text.toString()
+                    viewModel.updateNote(notes)
+                }
+            }
+            cancel_button.setOnClickListener {
+                mDialog.dismiss()
+            }
+        }
     }
 
 }

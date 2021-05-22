@@ -1,6 +1,7 @@
 package com.example.roomdb
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ class MainAdapter(private val list: List<UserEntity>, private val listener: OnCl
                     listener.onDeleteClick(note)
                 }
                 itemView.setOnClickListener {
+                    Log.d(TAG, "clicked  ${note.id}")
                     listener.onViewClick(note)
                 }
             }

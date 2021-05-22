@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val title: String,
-    val note: String
+    var title: String,
+    var note: String
 )
