@@ -27,7 +27,11 @@ class MainActivity : AppCompatActivity() {
         recyclerview.layoutManager = LinearLayoutManager(this)
         viewModel.getNotes()?.observe(this, Observer {
             if(it.isNotEmpty()) {
-                recyclerview.adapter = MainAdapter(it)
+                recyclerview.adapter = MainAdapter(it, object : MainAdapter.OnClickListener {
+                    override fun onDeleteClick(note: UserEntity) {
+                        deletebtnAction(note)
+                    }
+                })
             }
         })
 
@@ -54,6 +58,18 @@ class MainActivity : AppCompatActivity() {
             mDialog.dismiss()
         }
 
+    }
+
+    private fun deletebtnAction(note: UserEntity) {
+        val builder = AlertDialog.Builder(this)
+            .setMessage("Hapus ?")
+        builder.setPositiveButton("ya") {_,_ ->
+            viewModel.deleteNote(note)
+        }
+        builder.setNegativeButton("tidak") {_,_ ->
+            //nothing
+        }
+        builder.show()
     }
 
 }
