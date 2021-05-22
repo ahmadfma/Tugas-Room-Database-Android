@@ -13,6 +13,7 @@ class MainAdapter(private val list: List<UserEntity>, private val listener: OnCl
 
     interface OnClickListener {
         fun onDeleteClick(note: UserEntity)
+        fun onViewClick(note: UserEntity)
     }
 
     inner class Holder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -23,6 +24,9 @@ class MainAdapter(private val list: List<UserEntity>, private val listener: OnCl
                 notetv.text = note.note
                 deleteBtn.setOnClickListener {
                     listener.onDeleteClick(note)
+                }
+                itemView.setOnClickListener {
+                    listener.onViewClick(note)
                 }
             }
         }
